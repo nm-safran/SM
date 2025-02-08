@@ -119,12 +119,12 @@
                                             @endcan
                                             @can('edit-studentdetail')
                                                 <a class="btn btn-warning btn-sm"
-                                                    href="{{ route('studentdetails.edit', $studentDetail->id) }}">
+                                                    href="{{ route('studentdetails.edit', $studentDetail) }}">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                             @endcan
                                             @can('delete-studentdetail')
-                                                <form action="{{ route('studentdetails.destroy', $studentDetail->id) }}"
+                                                <form action="{{ route('studentdetails.destroy', $studentDetail) }}"
                                                     method="POST" style="display:inline-block;">
                                                     @csrf
                                                     @method('DELETE')

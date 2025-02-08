@@ -113,37 +113,72 @@ class StudentDetailController extends Controller
      */
     public function show(StudentDetail $studentDetail): View
     {
-        return view('studentdetails.show', [
-            'studentDetail' => $studentDetail
-        ]);
+        try {
+            // Format the birth date
+            $studentDetail->formatted_birth_date = Carbon::parse($studentDetail->birth_date)->format('d-m-Y');
+
+            // Calculate age
+            $studentDetail->age = Carbon::parse($studentDetail->birth_date)->age;
+
+            // Format contact number (assuming 10 digits)
+            $studentDetail->formatted_contact = chunk_split($studentDetail->contact_no, 3, '-');
+            $studentDetail->formatted_contact = rtrim($studentDetail->formatted_contact, '-');
+
+            // Get individual names
+            $studentDetail->first_name = $studentDetail->first_name;
+            $studentDetail->middle_name = $studentDetail->middle_name;
+            $studentDetail->last_name = $studentDetail->last_name;
+
+            // Get full name
+            $studentDetail->full_name = trim(implode(' ', array_filter([
+                $studentDetail->first_name,
+                $studentDetail->middle_name,
+                $studentDetail->last_name
+            ])));
+
+            // Get address components
+            $studentDetail->address = $studentDetail->address_one;
+            $studentDetail->city = $studentDetail->city;
+            $studentDetail->district = $studentDetail->district;
+
+            // Format full address
+            $studentDetail->full_address = implode(', ', array_filter([
+                $studentDetail->address_one,
+                $studentDetail->city,
+                $studentDetail->district
+            ]));
+
+            // Student code
+            $studentDetail->student_code = $studentDetail->student_code;
+
+            return view('studentdetails.show', compact('studentDetail'));
+        } catch (\Exception $e) {
+            return redirect()->route('studentdetails.index')
+                ->with('error', 'Error displaying student details: ' . $e->getMessage());
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(StudentDetail $studentDetail): View
+    public function edit(StudentDetail $studentDetail): View  // Changed to $studentDetail
     {
         return view('studentdetails.edit', [
             'studentDetail' => $studentDetail
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateStudentDetailRequest $request, StudentDetail $studentDetail): RedirectResponse
+    public function update(UpdateStudentDetailRequest $request, StudentDetail $studentDetail): RedirectResponse  // Changed to $studentDetail
     {
         $data = $request->validated();
-        $data['age'] = \Carbon\Carbon::parse($data['birth_date'])->diff(\Carbon\Carbon::create(2025, 1, 1))->y;
+        $data['age'] = Carbon::parse($data['birth_date'])->age;
         $studentDetail->update($data);
-        return redirect()->back()
+
+        return redirect()->route('studentdetails.index')
             ->withSuccess('Student detail is updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(StudentDetail $studentDetail)
+    public function destroy(StudentDetail $studentDetail)  // Changed to $studentDetail
     {
         $studentDetail->delete();
 
