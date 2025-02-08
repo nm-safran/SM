@@ -38,11 +38,11 @@
                                     <i class="bi bi-bag me-2"></i> Manage Student Details
                                 </a>
                             @endcanany
-                            @can(['view-studentdetail'])
+                            {{-- @can(['view-studentdetail'])
                                 <a class="btn btn-info mx-2 btn-hover-scale" href="{{ route('studentdetails.index') }}">
                                     <i class="bi bi-bag me-2"></i> View Student Details
                                 </a>
-                            @endcan
+                            @endcan --}}
                         </div>
 
                         <div class="row mt-5">

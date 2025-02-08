@@ -10,6 +10,7 @@
 
     <title>Student Management System</title>
 
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
@@ -20,9 +21,9 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-gradient-primary shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ route('home') }}">
+                <a class="navbar-brand text-white" href="{{ route('home') }}">
 
                     <img src="{{ asset('images/images.jpeg') }}" alt="Logo" style="height: 30px;">
                     Student Management System
@@ -45,33 +46,49 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link btn btn-outline-light mx-1 rounded-pill px-3 py-2"
+                                        href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link btn btn-outline-light mx-1 rounded-pill px-3 py-2"
+                                        href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
                             @canany(['create-role', 'edit-role', 'delete-role'])
-                                <li><a class="nav-link" href="{{ route('roles.index') }}">Manage Roles</a></li>
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-outline-light mx-1 rounded-pill px-3 py-2"
+                                        href="{{ route('roles.index') }}">Manage
+                                        Roles</a>
+                                </li>
                             @endcanany
                             @canany(['create-user', 'edit-user', 'delete-user'])
-                                <li><a class="nav-link" href="{{ route('users.index') }}">Manage Users</a></li>
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-outline-light mx-1 rounded-pill px-3 py-2"
+                                        href="{{ route('users.index') }}">Manage
+                                        Users</a>
+                                </li>
                             @endcanany
                             @canany(['create-studentdetail', 'edit-studentdetail', 'delete-studentdetail'])
-                                <li><a class="nav-link" href="{{ route('studentdetails.index') }}">Manage Student Details</a>
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-outline-light mx-1 rounded-pill px-3 py-2"
+                                        href="{{ route('studentdetails.index') }}">Manage Student Details</a>
                                 </li>
                             @endcanany
                             @can(['view-studentdetail'])
-                                <li><a class="nav-link" href="{{ route('studentdetails.index') }}">View Student Details</a>
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-outline-light mx-1 rounded-pill px-3 py-2"
+                                        href="{{ route('studentdetails.index') }}">View Student Details</a>
                                 </li>
                             @endcan
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown"
+                                    class="nav-link dropdown-toggle btn btn-outline-light mx-1 rounded-pill px-3 py-2"
+                                    href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
 
@@ -118,6 +135,22 @@
             </div>
         </main>
     </div>
+
+    <style>
+        .bg-gradient-primary {
+            background: linear-gradient(45deg, #4e73df, #224abe);
+        }
+
+        .btn-outline-light {
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .btn-outline-light:hover {
+            background-color: #fff;
+            color: #4e73df;
+        }
+    </style>
 </body>
 
 </html>
