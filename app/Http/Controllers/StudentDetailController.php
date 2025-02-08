@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\StudentDetail;
 use App\Http\Requests\StoreStudentDetailRequest;
 use App\Http\Requests\UpdateStudentDetailRequest;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -25,11 +26,21 @@ class StudentDetailController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('studentdetails.index', [
-            'studentDetails' => StudentDetail::all()
-        ]);
+        $search = $request->input('search');
+        $studentDetails = StudentDetail::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('student_code', 'like', "%{$search}%")
+                    ->orWhere('first_name', 'like', "%{$search}%")
+                    ->orWhere('middle_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%")
+                    ->orWhere('district', 'like', "%{$search}%");
+            })
+            ->paginate(10);
+
+        return view('studentdetails.index', compact('studentDetails', 'search'));
     }
 
     /**
