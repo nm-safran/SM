@@ -256,34 +256,56 @@
 
 @section('scripts')
     <script>
-        document.getElementById('birth_date').addEventListener('change', function() {
-            const birthDate = new Date(this.value);
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const monthDiff = today.getMonth() - birthDate.getMonth();
+        $(document).ready(function() {
+            // Form submission
+            $('#studentForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
 
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
-        });
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to save this student?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#151515',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading state
+                        Swal.fire({
+                            title: 'Saving...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
 
-        // Form validation before submit
-        document.getElementById('studentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            Swal.fire({
-                text: 'Are you sure you want to save this student?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, Save it!',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: '#0d6efd',
-                cancelButtonColor: '#6c757d',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.submit();
-                }
+                        // Submit the form
+                        form[0].submit();
+                    }
+                });
             });
+
+            // Show success message if exists
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    confirmButtonColor: '#151515'
+                });
+            @endif
+
+            // Show error message if exists
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#151515'
+                });
+            @endif
         });
     </script>
 @endsection

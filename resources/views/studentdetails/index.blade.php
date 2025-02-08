@@ -388,3 +388,50 @@
         }
     </style>
 @endsection
+
+@section('scripts')
+    <script>
+        // Delete confirmation
+        $(document).ready(function() {
+            $('.delete-btn').on('click', function(e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+                var studentId = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#9d0a0e',
+                    cancelButtonColor: '#151515',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+
+            // Show success message if exists
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: "{{ session('success') }}",
+                    confirmButtonColor: '#151515'
+                });
+            @endif
+
+            // Show error message if exists
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#151515'
+                });
+            @endif
+        });
+    </script>
+@endsection
