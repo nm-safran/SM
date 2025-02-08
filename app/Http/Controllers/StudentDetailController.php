@@ -78,12 +78,13 @@ class StudentDetailController extends Controller
         ]);
 
         try {
-            // Handle profile image upload
             if ($request->hasFile('profile_image')) {
                 $image = $request->file('profile_image');
-                $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
-                $path = $image->storeAs('public/profile_images', $filename);
-                $validated['profile_image'] = Storage::url($path);
+                $filename = time() . '_' . $image->getClientOriginalName();
+                // Store in public/storage/profile_images
+                $path = $image->storeAs('profile_images', $filename, 'public');
+                // Generate the correct URL for the image
+                $validated['profile_image'] = '/storage/' . $path;
             }
 
             // Calculate age

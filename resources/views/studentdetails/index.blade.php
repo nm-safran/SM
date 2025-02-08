@@ -65,13 +65,14 @@
                                     <td class="align-middle">{{ $studentDetail->first_name }}
                                         {{ $studentDetail->middle_name }}
                                         {{ $studentDetail->last_name }}</td>
-                                        
+
                                     <td class="align-middle text-center">
                                         @if ($studentDetail->profile_image)
                                             <button type="button" class="btn btn-link p-0" data-bs-toggle="modal"
                                                 data-bs-target="#profileModal{{ $studentDetail->id }}">
-                                                <img src="{{ $studentDetail->profile_image }}" alt="Profile"
-                                                    class="rounded-circle" width="40" height="40">
+                                                <img src="{{ asset($studentDetail->profile_image) }}" alt="Profile"
+                                                    class="rounded-circle" width="40" height="40"
+                                                    style="object-fit: cover;">
                                             </button>
 
                                             <!-- Profile Modal -->
@@ -90,8 +91,9 @@
                                                                 aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body text-center">
-                                                            <img src="{{ $studentDetail->profile_image }}" alt="Profile"
-                                                                class="img-fluid rounded" style="max-height: 400px;">
+                                                            <img src="{{ asset($studentDetail->profile_image) }}"
+                                                                alt="Profile" class="img-fluid rounded"
+                                                                style="max-height: 400px;">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -313,7 +315,23 @@
         }
 
         .rounded-circle {
+            width: 40px;
+            height: 40px;
             object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .btn-link:hover .rounded-circle {
+            transform: scale(1.1);
+        }
+
+        .modal-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .title-h3 {
