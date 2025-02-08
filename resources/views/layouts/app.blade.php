@@ -10,13 +10,26 @@
 
     <title>Student Management System</title>
 
-    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-
-    <!-- In the head section -->
+    <!-- Load CSS first -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="dns-prefetch" href="//fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+
+    <!-- Load JavaScript in the correct order -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Add this script to initialize dropdowns -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+            var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl)
+            });
+        });
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -88,22 +101,17 @@
                             @endcanany
 
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown"
-                                    class="nav-link dropdown-toggle btn btn-outline-light mx-1 rounded-pill px-3 py-2"
-                                    href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false" v-pre>
+                                <button class="btn btn-outline-light dropdown-toggle mx-1 rounded-pill px-3 py-2"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ Auth::user()->name }}
-                                </a>
+                                </button>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                <div class="dropdown-menu dropdown-menu-end" style="position: absolute;">
+                                    <form method="POST" action="{{ route('logout') }}">
                                         @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt me-2"></i>{{ __('Logout') }}
+                                        </button>
                                     </form>
                                 </div>
                             </li>
@@ -153,6 +161,31 @@
 
         .btn-outline-light:hover {
             background-color: #fff;
+            color: #4e73df;
+        }
+
+        /* Updated dropdown styles */
+        .dropdown-menu {
+            display: block;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            margin-top: 0.5rem;
+            min-width: 200px;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: none;
+            color: #333;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
             color: #4e73df;
         }
     </style>
