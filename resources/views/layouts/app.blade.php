@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Laravel 11 Spatie User Roles and Permissions - AllPHPTricks.com</title>
+    <title>Student Management System</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -23,7 +23,9 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ route('home') }}">
-                    AllPHPTricks.com
+
+                    <img src="{{ asset('images/images.jpeg') }}" alt="Logo" style="height: 30px;">
+                    Student Management System
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -107,8 +109,8 @@
 
                         <div class="row justify-content-center text-center mt-3">
                             <div class="col-md-12">
-                                <p>Copyrights @safran <a href="https://github.com/nm-safran"><strong>My
-                                            GitHub</strong></a></p>
+                                <p>Copyrights @safran <a href="https://github.com/nm-safran"><strong>GitHub</strong></a>
+                                </p>
                             </div>
                         </div>
                     </div>
