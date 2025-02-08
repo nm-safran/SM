@@ -9,9 +9,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Student Code</th>
-                    <th>First Name</th>
-                    <th>Middle Name</th>
-                    <th>Last Name</th>
+                    <th>Name</th>
                     <th>Profile Image</th>
                     <th>Birth Date</th>
                     <th>Age</th>
@@ -27,9 +25,8 @@
                     <tr>
                         <td>{{ $studentDetail->id }}</td>
                         <td>{{ $studentDetail->student_code }}</td>
-                        <td>{{ $studentDetail->first_name }}</td>
-                        <td>{{ $studentDetail->middle_name }}</td>
-                        <td>{{ $studentDetail->last_name }}</td>
+                        <td>{{ $studentDetail->first_name }} {{ $studentDetail->middle_name }}
+                            {{ $studentDetail->last_name }}</td>
                         <td><img src="{{ $studentDetail->profile_image }}" alt="Profile Image" width="50"></td>
                         <td>{{ $studentDetail->birth_date }}</td>
                         <td>{{ $studentDetail->age }}</td>
