@@ -102,25 +102,15 @@
                             </div>
                         @endif
 
-                        <h3 class="text-center mt-3 mb-3">Laravel 11 Spatie User Roles and Permissions - <a
-                                href="https://www.allphptricks.com/">AllPHPTricks.com</a></h3>
+                        <h3 class="text-center mt-3 mb-3">Student Management System</h3>
                         @yield('content')
 
                         <div class="row justify-content-center text-center mt-3">
                             <div class="col-md-12">
-                                <p>Back to Tutorial:
-                                    <a
-                                        href="https://www.allphptricks.com/laravel-11-spatie-user-roles-and-permissions/"><strong>Tutorial
-                                            Link</strong></a>
-                                </p>
-                                <p>
-                                    For More Web Development Tutorials Visit: <a
-                                        href="https://www.allphptricks.com/"><strong>AllPHPTricks.com</strong></a>
-                                </p>
+                                <p>Copyrights @safran <a href="https://github.com/nm-safran"><strong>My
+                                            GitHub</strong></a></p>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>

@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('roles.store') }}" method="post">
+                    <form id="create-role-form" action="{{ route('roles.store') }}" method="post">
                         @csrf
 
                         <div class="mb-3 row">
@@ -57,4 +57,38 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('create-role-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var form = this;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to create this role!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, create it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+
+        @if (session('success'))
+            Swal.fire({
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = "{{ route('roles.index') }}";
+            });
+        @endif
+    </script>
 @endsection
