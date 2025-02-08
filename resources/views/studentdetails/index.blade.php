@@ -58,9 +58,9 @@
                                 <td colspan="11" class="text-center py-4">No Data Available</td>
                             </tr>
                         @else
-                            @foreach ($studentDetails as $studentDetail)
+                            @foreach ($studentDetails as $index => $studentDetail)
                                 <tr>
-                                    <td class="align-middle">{{ $studentDetail->id }}</td>
+                                    <td class="align-middle">{{ $studentDetails->firstItem() + $index }}</td>
                                     <td class="align-middle">{{ $studentDetail->student_code }}</td>
                                     <td class="align-middle">{{ $studentDetail->first_name }}
                                         {{ $studentDetail->middle_name }}
