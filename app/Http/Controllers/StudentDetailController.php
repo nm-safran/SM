@@ -71,6 +71,7 @@ class StudentDetailController extends Controller
             'last_name' => 'required|string|max:50',
             'birth_date' => 'required|date|before:today',
             'contact_no' => 'required|string|max:15',
+            'email' => 'required|string|email|max:255|unique:student_details',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'address_one' => 'required|string|max:255',
             'city' => 'required|string|max:50',
@@ -161,24 +162,39 @@ class StudentDetailController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(StudentDetail $studentDetail): View  // Changed to $studentDetail
+    public function edit(StudentDetail $studentDetail): View
     {
         return view('studentdetails.edit', [
             'studentDetail' => $studentDetail
         ]);
     }
 
-    public function update(UpdateStudentDetailRequest $request, StudentDetail $studentDetail): RedirectResponse  // Changed to $studentDetail
+    public function update(UpdateStudentDetailRequest $request, StudentDetail $studentDetail): RedirectResponse
     {
         $data = $request->validated();
         $data['age'] = Carbon::parse($data['birth_date'])->age;
+
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $filename = time() . '_' . $image->getClientOriginalName();
+            // Store in public/storage/profile_images
+            $path = $image->storeAs('profile_images', $filename, 'public');
+            // Generate the correct URL for the image
+            $data['profile_image'] = '/storage/' . $path;
+
+            // Delete the old image if it exists
+            if ($studentDetail->profile_image) {
+                Storage::delete(str_replace('/storage/', '', $studentDetail->profile_image));
+            }
+        }
+
         $studentDetail->update($data);
 
         return redirect()->route('studentdetails.index')
             ->withSuccess('Student detail is updated successfully.');
     }
 
-    public function destroy(StudentDetail $studentDetail)  // Changed to $studentDetail
+    public function destroy(StudentDetail $studentDetail)
     {
         $studentDetail->delete();
 
