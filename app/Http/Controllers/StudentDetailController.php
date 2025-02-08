@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateStudentDetailRequest;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class StudentDetailController extends Controller
 {
@@ -29,6 +32,9 @@ class StudentDetailController extends Controller
     public function index(Request $request): View
     {
         $search = $request->input('search');
+        $sortBy = $request->input('sort_by', 'id'); // default sort by id
+        $sortOrder = $request->input('sort_order', 'asc'); // default ascending
+
         $studentDetails = StudentDetail::query()
             ->when($search, function ($query, $search) {
                 return $query->where('student_code', 'like', "%{$search}%")
@@ -38,6 +44,7 @@ class StudentDetailController extends Controller
                     ->orWhere('city', 'like', "%{$search}%")
                     ->orWhere('district', 'like', "%{$search}%");
             })
+            ->orderBy($sortBy, $sortOrder)
             ->paginate(10);
 
         return view('studentdetails.index', compact('studentDetails', 'search'));
@@ -54,13 +61,50 @@ class StudentDetailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreStudentDetailRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        $data = $request->validated();
-        $data['age'] = \Carbon\Carbon::parse($data['birth_date'])->diff(\Carbon\Carbon::create(2025, 1, 1))->y;
-        StudentDetail::create($data);
-        return redirect()->route('studentdetails.index')
-            ->withSuccess('New student detail is added successfully.');
+        // Validate the request
+        $validated = $request->validate([
+            'student_code' => 'required|string|max:20|unique:student_details',
+            'first_name' => 'required|string|max:50',
+            'middle_name' => 'nullable|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'birth_date' => 'required|date|before:today',
+            'contact_no' => 'required|string|max:15',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'address_one' => 'required|string|max:255',
+            'city' => 'required|string|max:50',
+            'district' => 'required|string|max:50',
+        ]);
+
+        try {
+            // Handle profile image upload
+            if ($request->hasFile('profile_image')) {
+                $image = $request->file('profile_image');
+                $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs('public/profile_images', $filename);
+                $validated['profile_image'] = Storage::url($path);
+            }
+
+            // Calculate age
+            $birthDate = Carbon::parse($validated['birth_date']);
+            $validated['age'] = $birthDate->age;
+
+            // Create student record
+            $student = StudentDetail::create($validated);
+
+            return redirect()->route('studentdetails.index')
+                ->with('success', 'Student created successfully.');
+        } catch (\Exception $e) {
+            // If there's an error, delete the uploaded image if it exists
+            if (isset($path)) {
+                Storage::delete($path);
+            }
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error creating student: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -98,9 +142,16 @@ class StudentDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(StudentDetail $studentDetail): RedirectResponse
+    public function destroy(StudentDetail $studentDetail)
     {
         $studentDetail->delete();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'message' => 'Student detail is deleted successfully.'
+            ]);
+        }
+
         return redirect()->route('studentdetails.index')
             ->withSuccess('Student detail is deleted successfully.');
     }

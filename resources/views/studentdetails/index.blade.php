@@ -3,98 +3,117 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 margin-tb">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="pull-left">
-                    <h3 class="title-h3">Student Details</h3>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 class="title-h3 fw-bold">Student Details</h3>
                 </div>
             </div>
         </div>
     </div>
-    <div class="mb-3 row">
-        <div class="col-md-12">
-            <form action="" method="GET">
-                <div class="row g-2">
-                    <div class="col">
-                        <a class="mb-2 btn btn-custom" href="{{ route('studentdetails.create') }}">
-                            <i class="bi bi-plus-circle"></i> Add New Student
-                        </a>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="mb-3">
+                <form action="" method="GET">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a class="btn btn-custom w-100" href="{{ route('studentdetails.create') }}"
+                                style="background-color: #151515; color: #fff;">
+                                <i class="bi bi-plus-circle me-2"></i> Add New Student
+                            </a>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" name="search" value="{{ request()->search }}" class="form-control"
+                                placeholder="Search Student...">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fa-solid fa-search me-2"></i> Search
+                            </button>
+                        </div>
                     </div>
-                    <div class="col">
-                        <input type="text" name="search" value="{{ request()->search }}" class="form-control"
-                            placeholder="Search Student...">
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-customsub"><i class="fa-solid fa-search"></i> Search</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead style="background-color: #0d6efd !important;">
+                        <tr>
+                            <th style="width: 5%; color: #000000 !important;">ID</th>
+                            <th style="width: 10%; color: #000000 !important;">Student Code</th>
+                            <th style="width: 15%; color: #000000 !important;">Name</th>
+                            <th style="width: 8%; color: #000000 !important;">Profile</th>
+                            <th style="width: 10%; color: #000000 !important;">Birth Date</th>
+                            <th style="width: 5%; color: #000000 !important;">Age</th>
+                            <th style="width: 15%; color: #000000 !important;">Address</th>
+                            <th style="width: 8%; color: #000000 !important;">City</th>
+                            <th style="width: 8%; color: #000000 !important;">District</th>
+                            <th style="width: 8%; color: #000000 !important;">Contact</th>
+                            <th style="width: 8%; color: #000000 !important;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if ($studentDetails->isEmpty())
+                            <tr>
+                                <td colspan="11" class="text-center py-4">No Data Available</td>
+                            </tr>
+                        @else
+                            @foreach ($studentDetails as $studentDetail)
+                                <tr>
+                                    <td class="align-middle">{{ $studentDetail->id }}</td>
+                                    <td class="align-middle">{{ $studentDetail->student_code }}</td>
+                                    <td class="align-middle">{{ $studentDetail->first_name }}
+                                        {{ $studentDetail->middle_name }}
+                                        {{ $studentDetail->last_name }}</td>
+                                    <td class="align-middle text-center">
+                                        <img src="{{ $studentDetail->profile_image }}" alt="Profile" class="rounded-circle"
+                                            width="40" height="40">
+                                    </td>
+                                    <td class="align-middle">{{ date('d-m-Y', strtotime($studentDetail->birth_date)) }}</td>
+                                    <td class="align-middle text-center">{{ $studentDetail->age }}</td>
+                                    <td class="align-middle">{{ $studentDetail->address_one }}</td>
+                                    <td class="align-middle">{{ $studentDetail->city }}</td>
+                                    <td class="align-middle">{{ $studentDetail->district }}</td>
+                                    <td class="align-middle">{{ $studentDetail->contact_no }}</td>
+                                    <td class="align-middle">
+                                        <div class="d-flex gap-1 justify-content-center">
+                                            @can('view-studentdetail')
+                                                <a class="btn btn-info btn-sm"
+                                                    href="{{ route('studentdetails.show', $studentDetail->id) }}">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            @endcan
+                                            @can('edit-studentdetail')
+                                                <a class="btn btn-warning btn-sm"
+                                                    href="{{ route('studentdetails.edit', $studentDetail->id) }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            @endcan
+                                            @can('delete-studentdetail')
+                                                <form action="{{ route('studentdetails.destroy', $studentDetail->id) }}"
+                                                    method="POST" style="display:inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm delete-btn"
+                                                        data-id="{{ $studentDetail->id }}">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            @endcan
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <table class="table table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th>ID</th>
-                <th>Student Code</th>
-                <th>Name</th>
-                <th>Profile Image</th>
-                <th>Birth Date</th>
-                <th>Age</th>
-                <th>Address</th>
-                <th>City</th>
-                <th>District</th>
-                <th>Contact No</th>
-                <th width="160px">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if ($studentDetails->isEmpty())
-                <tr>
-                    <td colspan="11" class="text-center">No Data Available</td>
-                </tr>
-            @else
-                @foreach ($studentDetails as $studentDetail)
-                    <tr>
-                        <td>{{ $studentDetail->id }}</td>
-                        <td>{{ $studentDetail->student_code }}</td>
-                        <td>{{ $studentDetail->first_name }} {{ $studentDetail->middle_name }}
-                            {{ $studentDetail->last_name }}</td>
-                        <td><img src="{{ $studentDetail->profile_image }}" alt="Profile Image" width="50"></td>
-                        <td>{{ $studentDetail->birth_date }}</td>
-                        <td>{{ $studentDetail->age }}</td>
-                        <td>{{ $studentDetail->address_one }}</td>
-                        <td>{{ $studentDetail->city }}</td>
-                        <td>{{ $studentDetail->district }}</td>
-                        <td>{{ $studentDetail->contact_no }}</td>
-                        <td>
-                            @can('view-studentdetail')
-                                <a class="btn btn-info btn-sm" href="{{ route('studentdetails.show', $studentDetail->id) }}">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            @endcan
-                            @can('edit-studentdetail')
-                                <a href="{{ route('studentdetails.edit', $studentDetail->id) }}"
-                                    class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            @endcan
-                            @can('delete-studentdetail')
-                                <form action="{{ route('studentdetails.destroy', $studentDetail->id) }}" method="POST"
-                                    style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm delete-btn"
-                                        data-id="{{ $studentDetail->id }}">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            @endcan
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
-        </tbody>
-    </table>
+    <div class="d-flex justify-content-center">
+        {{ $studentDetails->appends(request()->query())->links('pagination::bootstrap-4') }}
+    </div>
 
     @if ($studentDetails->isEmpty() && request()->search != '')
         <script>
@@ -211,22 +230,73 @@
             });
         });
     </script>
-
-    <div class="mt-2 d-flex justify-content-center" style="margin-bottom: 0;">
-        {{ $studentDetails->links('pagination::bootstrap-4') }}
-    </div>
 @endsection
 
 @section('styles')
     <style>
-        .swal2-confirm,
-        .swal2-cancel {
-            transition: background-color 0.3s, box-shadow 0.3s;
+        .card {
+            border-radius: 8px;
+            border: none;
         }
 
-        .swal2-confirm:hover,
-        .swal2-cancel:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+        }
+
+        .table tbody td {
+            font-size: 0.875rem;
+            vertical-align: middle;
+        }
+
+        .btn-custom {
+            background-color: #151515;
+            color: #fff;
+            transition: all 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: #4d4d4d;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .rounded-circle {
+            object-fit: cover;
+        }
+
+        .title-h3 {
+            color: #151515;
+            margin-bottom: 0;
+        }
+
+        .form-control {
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+
+        .pagination {
+            margin-top: 1.5rem;
         }
     </style>
 @endsection

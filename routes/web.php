@@ -19,3 +19,7 @@ Route::resources([
     'users' => UserController::class,
     'studentdetails' => StudentDetailController::class,
 ]);
+
+Route::delete('/studentdetails/{studentDetail}', [StudentDetailController::class, 'destroy'])
+    ->name('studentdetails.destroy')
+    ->middleware('auth');
