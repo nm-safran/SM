@@ -264,6 +264,23 @@
                 e.preventDefault();
                 var form = $(this);
 
+                // Calculate age from birth date
+                var birthDate = new Date($('#birth_date').val());
+                var today = new Date();
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+
+                // Add age to form data
+                var ageInput = $('<input>').attr({
+                    type: 'hidden',
+                    name: 'age',
+                    value: age
+                });
+                form.append(ageInput);
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "Do you want to save this student?",

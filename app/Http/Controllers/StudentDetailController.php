@@ -61,30 +61,16 @@ class StudentDetailController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreStudentDetailRequest $request): RedirectResponse
     {
-        // Validate the request
-        $validated = $request->validate([
-            'student_code' => 'required|string|max:20|unique:student_details',
-            'first_name' => 'required|string|max:50',
-            'middle_name' => 'nullable|string|max:50',
-            'last_name' => 'required|string|max:50',
-            'birth_date' => 'required|date|before:today',
-            'contact_no' => 'required|string|max:15',
-            'email' => 'required|string|email|max:255|unique:student_details',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'address_one' => 'required|string|max:255',
-            'city' => 'required|string|max:50',
-            'district' => 'required|string|max:50',
-        ]);
-
         try {
+            $validated = $request->validated();
+
+            // Handle profile image upload
             if ($request->hasFile('profile_image')) {
                 $image = $request->file('profile_image');
                 $filename = time() . '_' . $image->getClientOriginalName();
-                // Store in public/storage/profile_images
                 $path = $image->storeAs('profile_images', $filename, 'public');
-                // Generate the correct URL for the image
                 $validated['profile_image'] = '/storage/' . $path;
             }
 
@@ -93,7 +79,7 @@ class StudentDetailController extends Controller
             $validated['age'] = $birthDate->age;
 
             // Create student record
-            $student = StudentDetail::create($validated);
+            StudentDetail::create($validated);
 
             return redirect()->route('studentdetails.index')
                 ->with('success', 'Student created successfully.');

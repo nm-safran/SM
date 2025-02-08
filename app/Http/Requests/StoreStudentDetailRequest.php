@@ -32,7 +32,7 @@ class StoreStudentDetailRequest extends FormRequest
             'address_one' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'district' => 'required|string|max:255',
-            'contact_no' => 'required|string|max:15',
+            'contact_no' => 'required|string|max:15'
         ];
     }
 }
