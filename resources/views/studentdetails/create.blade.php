@@ -8,7 +8,8 @@
                     <h3 class="title-h3 fw-bold">Add New Student</h3>
                 </div>
                 <div>
-                    <a class="btn btn-custom" href="{{ route('studentdetails.index') }}">
+                    <a class="btn" href="{{ route('studentdetails.index') }}"
+                        style="background-color: #151515; color: #ffffff;">
                         <i class="fas fa-arrow-left me-2"></i> Back
                     </a>
                 </div>
@@ -18,7 +19,8 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form action="{{ route('studentdetails.store') }}" method="POST" enctype="multipart/form-data" id="studentForm">
+            <form action="{{ route('studentdetails.store') }}" method="POST" enctype="multipart/form-data"
+                id="studentForm">
                 @csrf
                 <div class="row g-3">
                     <div class="col-md-4">
