@@ -21,13 +21,13 @@ class RoleSeeder extends Seeder
             'create-user',
             'edit-user',
             'delete-user',
-            'create-product',
-            'edit-product',
-            'delete-product'
+            'create-studentdetail',
+            'edit-studentdetail',
+            'delete-studentdetail'
         ]);
 
         $user->givePermissionTo([
-            'view-product'
+            'view-studentdetail'
         ]);
     }
 }

@@ -13,10 +13,17 @@ class CreateStudentDetailsTable extends Migration
     {
         Schema::create('student_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('course');
-            $table->integer('year');
+            $table->string('student_code')->unique();
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('last_name');
+            $table->string('profile_image')->nullable();
+            $table->date('birth_date');
+            $table->integer('age');
+            $table->string('address_one');
+            $table->string('city');
+            $table->string('district');
+            $table->string('contact_no');
             $table->timestamps();
         });
     }

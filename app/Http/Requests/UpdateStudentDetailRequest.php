@@ -16,14 +16,23 @@ class UpdateStudentDetailRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:student_details,email,' . $this->route('studentdetail')->id,
-            'course' => 'required|string|max:255',
-            'year' => 'required|integer|min:1|max:6',
+            'student_code' => 'required|string|unique:student_details,student_code,' . $this->route('studentdetail')->id,
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'profile_image' => 'nullable|image|max:2048',
+            'birth_date' => 'required|date',
+            'age' => 'required|integer|min:0',
+            'address_one' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'district' => 'required|string|max:255',
+            'contact_no' => 'required|string|max:15',
         ];
     }
 }
