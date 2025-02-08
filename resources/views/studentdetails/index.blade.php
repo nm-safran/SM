@@ -65,11 +65,43 @@
                                     <td class="align-middle">{{ $studentDetail->first_name }}
                                         {{ $studentDetail->middle_name }}
                                         {{ $studentDetail->last_name }}</td>
+                                        
                                     <td class="align-middle text-center">
-                                        <img src="{{ $studentDetail->profile_image }}" alt="Profile" class="rounded-circle"
-                                            width="40" height="40">
+                                        @if ($studentDetail->profile_image)
+                                            <button type="button" class="btn btn-link p-0" data-bs-toggle="modal"
+                                                data-bs-target="#profileModal{{ $studentDetail->id }}">
+                                                <img src="{{ $studentDetail->profile_image }}" alt="Profile"
+                                                    class="rounded-circle" width="40" height="40">
+                                            </button>
+
+                                            <!-- Profile Modal -->
+                                            <div class="modal fade" id="profileModal{{ $studentDetail->id }}" tabindex="-1"
+                                                aria-labelledby="profileModalLabel{{ $studentDetail->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="profileModalLabel{{ $studentDetail->id }}">
+                                                                {{ $studentDetail->first_name }}
+                                                                {{ $studentDetail->last_name }}'s Profile
+                                                            </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            <img src="{{ $studentDetail->profile_image }}" alt="Profile"
+                                                                class="img-fluid rounded" style="max-height: 400px;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <span class="text-muted">No Image</span>
+                                        @endif
                                     </td>
-                                    <td class="align-middle">{{ date('d-m-Y', strtotime($studentDetail->birth_date)) }}</td>
+                                    <td class="align-middle">{{ date('d-m-Y', strtotime($studentDetail->birth_date)) }}
+                                    </td>
                                     <td class="align-middle text-center">{{ $studentDetail->age }}</td>
                                     <td class="align-middle">{{ $studentDetail->address_one }}</td>
                                     <td class="align-middle">{{ $studentDetail->city }}</td>
@@ -230,6 +262,14 @@
             });
         });
     </script>
+
+    <!-- Initialize all modals -->
+    <script>
+        var profileModals = document.querySelectorAll('.modal');
+        profileModals.forEach(function(modal) {
+            new bootstrap.Modal(modal);
+        });
+    </script>
 @endsection
 
 @section('styles')
@@ -297,6 +337,36 @@
 
         .pagination {
             margin-top: 1.5rem;
+        }
+
+        .btn-link {
+            text-decoration: none;
+        }
+
+        .btn-link:hover img {
+            transform: scale(1.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 8px;
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .img-fluid {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 @endsection
