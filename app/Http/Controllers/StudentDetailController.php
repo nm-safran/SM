@@ -162,11 +162,10 @@ class StudentDetailController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(StudentDetail $studentDetail): View
+    public function edit($id)
     {
-        return view('studentdetails.edit', [
-            'studentDetail' => $studentDetail
-        ]);
+        $studentDetail = StudentDetail::findOrFail($id);
+        return view('studentdetails.edit', compact('studentDetail'));
     }
 
     public function update(UpdateStudentDetailRequest $request, StudentDetail $studentDetail): RedirectResponse

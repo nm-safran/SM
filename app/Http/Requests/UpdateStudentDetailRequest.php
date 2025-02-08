@@ -22,13 +22,13 @@ class UpdateStudentDetailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_code' => 'required|string|unique:student_details,student_code,' . $this->route('studentdetail')->id,
+            'student_code' => 'required|string|unique:student_details,student_code,' . $this->studentDetail->id,
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
             'profile_image' => 'nullable|image|max:2048',
             'birth_date' => 'required|date',
-            'age' => 'required|integer|min:0',
+            'age' => 'nullable|integer|min:0',
             'address_one' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'district' => 'required|string|max:255',

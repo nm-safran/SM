@@ -37,3 +37,5 @@ Route::controller(StudentDetailController::class)->group(function () {
     Route::put('/studentdetails/{studentDetail}', 'update')->name('studentdetails.update');
     Route::delete('/studentdetails/{studentDetail}', 'destroy')->name('studentdetails.destroy');
 });
+
+Route::resource('studentdetails', StudentDetailController::class);

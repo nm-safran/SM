@@ -78,7 +78,7 @@
                             <label for="birth_date" class="form-label">Birth Date <span class="text-danger">*</span></label>
                             <input type="date" name="birth_date" id="birth_date"
                                 class="form-control @error('birth_date') is-invalid @enderror"
-                                value="{{ $studentDetail->birth_date }}" required>
+                                value="{{ date('Y-m-d', strtotime($studentDetail->birth_date)) }}" required>
                             @error('birth_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -103,7 +103,17 @@
                             <input type="file" name="profile_image" id="profile_image"
                                 class="form-control @error('profile_image') is-invalid @enderror" accept="image/*">
                             @if ($studentDetail->profile_image)
-                                <img src="{{ $studentDetail->profile_image }}" alt="Profile Image" width="100">
+                                <div class="mt-2">
+                                    <img src="{{ asset($studentDetail->profile_image) }}" alt="Current Profile Image"
+                                        class="img-thumbnail" style="max-height: 100px;">
+                                    <div class="form-check mt-1">
+                                        <input class="form-check-input" type="checkbox" name="remove_image"
+                                            id="remove_image">
+                                        <label class="form-check-label" for="remove_image">
+                                            Remove current image
+                                        </label>
+                                    </div>
+                                </div>
                             @endif
                             @error('profile_image')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -113,7 +123,8 @@
 
                     <div class="col-md-8">
                         <div class="form-group mb-3">
-                            <label for="address_one" class="form-label">Address <span class="text-danger">*</span></label>
+                            <label for="address_one" class="form-label">Address <span
+                                    class="text-danger">*</span></label>
                             <input type="text" name="address_one" id="address_one"
                                 class="form-control @error('address_one') is-invalid @enderror"
                                 value="{{ $studentDetail->address_one }}" required>
@@ -141,74 +152,41 @@
                             <select name="district" id="district"
                                 class="form-select @error('district') is-invalid @enderror" required>
                                 <option value="">Select District</option>
-                                <option value="Ampara" {{ $studentDetail->district == 'Ampara' ? 'selected' : '' }}>Ampara
-                                </option>
-                                <option value="Anuradhapura"
-                                    {{ $studentDetail->district == 'Anuradhapura' ? 'selected' : '' }}>
-                                    Anuradhapura</option>
-                                <option value="Badulla" {{ $studentDetail->district == 'Badulla' ? 'selected' : '' }}>
-                                    Badulla
-                                </option>
-                                <option value="Batticaloa"
-                                    {{ $studentDetail->district == 'Batticaloa' ? 'selected' : '' }}>
-                                    Batticaloa</option>
-                                <option value="Colombo" {{ $studentDetail->district == 'Colombo' ? 'selected' : '' }}>
-                                    Colombo
-                                </option>
-                                <option value="Galle" {{ $studentDetail->district == 'Galle' ? 'selected' : '' }}>Galle
-                                </option>
-                                <option value="Gampaha" {{ $studentDetail->district == 'Gampaha' ? 'selected' : '' }}>
-                                    Gampaha
-                                </option>
-                                <option value="Hambantota"
-                                    {{ $studentDetail->district == 'Hambantota' ? 'selected' : '' }}>
-                                    Hambantota</option>
-                                <option value="Jaffna" {{ $studentDetail->district == 'Jaffna' ? 'selected' : '' }}>Jaffna
-                                </option>
-                                <option value="Kalutara" {{ $studentDetail->district == 'Kalutara' ? 'selected' : '' }}>
-                                    Kalutara
-                                </option>
-                                <option value="Kandy" {{ $studentDetail->district == 'Kandy' ? 'selected' : '' }}>Kandy
-                                </option>
-                                <option value="Kegalle" {{ $studentDetail->district == 'Kegalle' ? 'selected' : '' }}>
-                                    Kegalle
-                                </option>
-                                <option value="Kilinochchi"
-                                    {{ $studentDetail->district == 'Kilinochchi' ? 'selected' : '' }}>
-                                    Kilinochchi</option>
-                                <option value="Kurunegala"
-                                    {{ $studentDetail->district == 'Kurunegala' ? 'selected' : '' }}>
-                                    Kurunegala</option>
-                                <option value="Mannar" {{ $studentDetail->district == 'Mannar' ? 'selected' : '' }}>Mannar
-                                </option>
-                                <option value="Matale" {{ $studentDetail->district == 'Matale' ? 'selected' : '' }}>Matale
-                                </option>
-                                <option value="Matara" {{ $studentDetail->district == 'Matara' ? 'selected' : '' }}>Matara
-                                </option>
-                                <option value="Monaragala"
-                                    {{ $studentDetail->district == 'Monaragala' ? 'selected' : '' }}>
-                                    Monaragala</option>
-                                <option value="Mullaitivu"
-                                    {{ $studentDetail->district == 'Mullaitivu' ? 'selected' : '' }}>
-                                    Mullaitivu</option>
-                                <option value="Nuwara Eliya"
-                                    {{ $studentDetail->district == 'Nuwara Eliya' ? 'selected' : '' }}>
-                                    Nuwara Eliya</option>
-                                <option value="Polonnaruwa"
-                                    {{ $studentDetail->district == 'Polonnaruwa' ? 'selected' : '' }}>
-                                    Polonnaruwa</option>
-                                <option value="Puttalam" {{ $studentDetail->district == 'Puttalam' ? 'selected' : '' }}>
-                                    Puttalam
-                                </option>
-                                <option value="Ratnapura" {{ $studentDetail->district == 'Ratnapura' ? 'selected' : '' }}>
-                                    Ratnapura
-                                </option>
-                                <option value="Trincomalee"
-                                    {{ $studentDetail->district == 'Trincomalee' ? 'selected' : '' }}>
-                                    Trincomalee</option>
-                                <option value="Vavuniya" {{ $studentDetail->district == 'Vavuniya' ? 'selected' : '' }}>
-                                    Vavuniya
-                                </option>
+                                @php
+                                    $districts = [
+                                        'Ampara',
+                                        'Anuradhapura',
+                                        'Badulla',
+                                        'Batticaloa',
+                                        'Colombo',
+                                        'Galle',
+                                        'Gampaha',
+                                        'Hambantota',
+                                        'Jaffna',
+                                        'Kalutara',
+                                        'Kandy',
+                                        'Kegalle',
+                                        'Kilinochchi',
+                                        'Kurunegala',
+                                        'Mannar',
+                                        'Matale',
+                                        'Matara',
+                                        'Monaragala',
+                                        'Mullaitivu',
+                                        'Nuwara Eliya',
+                                        'Polonnaruwa',
+                                        'Puttalam',
+                                        'Ratnapura',
+                                        'Trincomalee',
+                                        'Vavuniya',
+                                    ];
+                                @endphp
+                                @foreach ($districts as $dist)
+                                    <option value="{{ $dist }}"
+                                        {{ $studentDetail->district == $dist ? 'selected' : '' }}>
+                                        {{ $dist }}
+                                    </option>
+                                @endforeach
                             </select>
                             @error('district')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -303,22 +281,12 @@
                     confirmButtonText: 'Yes, update it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Show loading state
-                        Swal.fire({
-                            title: 'Updating...',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        // Submit the form
                         form[0].submit();
                     }
                 });
             });
 
-            // Show success message if exists
+            // Show success/error messages
             @if (session('success'))
                 Swal.fire({
                     icon: 'success',
@@ -328,7 +296,6 @@
                 });
             @endif
 
-            // Show error message if exists
             @if (session('error'))
                 Swal.fire({
                     icon: 'error',

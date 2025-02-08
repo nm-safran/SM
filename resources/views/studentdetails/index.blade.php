@@ -119,7 +119,7 @@
                                             @endcan
                                             @can('edit-studentdetail')
                                                 <a class="btn btn-warning btn-sm"
-                                                    href="{{ route('studentdetails.edit', $studentDetail) }}">
+                                                    href="{{ route('studentdetails.edit', $studentDetail->id) }}">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                             @endcan
