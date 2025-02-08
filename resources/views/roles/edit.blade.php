@@ -98,7 +98,7 @@
             });
         @endif
 
-        document.querySelector('.btn-primary').addEventListener('click', function(event) {
+        document.querySelector('.btn-primary.btn-sm').addEventListener('click', function(event) {
             event.preventDefault();
             Swal.fire({
                 title: 'Navigating!',

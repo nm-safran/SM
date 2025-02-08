@@ -78,12 +78,7 @@
                                         href="{{ route('studentdetails.index') }}">Manage Student Details</a>
                                 </li>
                             @endcanany
-                            @can(['view-studentdetail'])
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-outline-light mx-1 rounded-pill px-3 py-2"
-                                        href="{{ route('studentdetails.index') }}">View Student Details</a>
-                                </li>
-                            @endcan
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown"
                                     class="nav-link dropdown-toggle btn btn-outline-light mx-1 rounded-pill px-3 py-2"
