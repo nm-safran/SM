@@ -24,9 +24,12 @@
     <!-- Add this script to initialize dropdowns -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-            var dropdownList = dropdownElementList.map(function(dropdownToggleEl) {
-                return new bootstrap.Dropdown(dropdownToggleEl)
+            // Initialize all dropdowns
+            var dropdowns = document.querySelectorAll('.dropdown-toggle');
+            dropdowns.forEach(function(dropdown) {
+                new bootstrap.Dropdown(dropdown, {
+                    hover: true // Enable hover
+                });
             });
         });
     </script>
@@ -100,19 +103,23 @@
                                 </li>
                             @endcanany
 
-                            <li class="nav-item dropdown">
-                                <button class="btn btn-outline-light dropdown-toggle mx-1 rounded-pill px-3 py-2"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ Auth::user()->name }}
-                                </button>
+                            <li class="nav-item">
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-light dropdown-toggle mx-1 rounded-pill px-3 py-2"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ Auth::user()->name }}
+                                    </button>
 
-                                <div class="dropdown-menu dropdown-menu-end" style="position: absolute;">
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">
-                                            <i class="fas fa-sign-out-alt me-2"></i>{{ __('Logout') }}
-                                        </button>
-                                    </form>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <form action="{{ route('logout') }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
                                 </div>
                             </li>
                         @endguest
@@ -166,29 +173,79 @@
 
         /* Updated dropdown styles */
         .dropdown-menu {
-            display: block;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            margin-top: 0.5rem;
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
             min-width: 200px;
+            padding: 0.5rem 0;
+            margin: 0.125rem 0 0;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, .15);
+            border-radius: 0.25rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .175);
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block !important;
         }
 
         .dropdown-item {
-            padding: 0.5rem 1rem;
-            cursor: pointer;
+            display: block;
             width: 100%;
-            text-align: left;
-            border: none;
-            background: none;
-            color: #333;
+            padding: 0.5rem 1rem;
+            clear: both;
+            text-align: inherit;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+            cursor: pointer;
         }
 
         .dropdown-item:hover {
             background-color: #f8f9fa;
             color: #4e73df;
         }
+
+        /* Ensure the dropdown toggle button looks active when clicked */
+        .dropdown-toggle:focus,
+        .dropdown-toggle:active {
+            outline: none;
+            box-shadow: none;
+        }
     </style>
+
+    <!-- Add this script right before closing body tag -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // For debugging - remove after confirming it works
+            console.log('Script loaded');
+
+            const dropdownToggle = document.querySelector('.dropdown-toggle');
+            if (dropdownToggle) {
+                console.log('Dropdown toggle found');
+
+                dropdownToggle.addEventListener('click', function() {
+                    console.log('Dropdown clicked');
+                    const dropdownMenu = this.nextElementSibling;
+                    dropdownMenu.classList.toggle('show');
+                });
+            }
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.matches('.dropdown-toggle')) {
+                    const dropdowns = document.getElementsByClassName('dropdown-menu');
+                    Array.from(dropdowns).forEach(dropdown => {
+                        if (dropdown.classList.contains('show')) {
+                            dropdown.classList.remove('show');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
