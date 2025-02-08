@@ -18,11 +18,11 @@
                             </div>
                         @endif
 
-                        <div class="text-center mb-5">
+                        <div class="text-center mb-3">
                             <h4 class="text-muted">{{ __('You are logged in!') }}</h4>
                         </div>
 
-                        <div class="d-flex justify-content-center mt-4">
+                        <div class="d-flex justify-content-center mt-2">
                             @canany(['create-role', 'edit-role', 'delete-role'])
                                 <a class="btn btn-primary mx-2 btn-hover-scale" href="{{ route('roles.index') }}">
                                     <i class="bi bi-person-fill-gear me-2"></i> Manage Roles
