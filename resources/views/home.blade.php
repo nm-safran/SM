@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
+    <div class="container-fluid vh-100 d-flex flex-column justify-content-center align-items-center overflow-hidden">
+        <div class="row justify-content-center w-100">
             <div class="col-md-12">
                 <div class="card shadow-lg">
                     <div class="card-header bg-gradient-primary text-white text-center py-4">
-                        <h2 class="display-4">{{ __('Dashboard') }}</h2>
+                        <h2 class="display-6">{{ __('Dashboard') }}</h2>
                         <p class="lead">Welcome to the Student Management System</p>
                     </div>
                     <div class="card-body p-5">
@@ -86,6 +86,11 @@
     </div>
 
     <style>
+        .container-fluid {
+            padding: 0;
+            overflow: hidden;
+        }
+
         .bg-gradient-primary {
             background: linear-gradient(45deg, #4e73df, #224abe);
         }
