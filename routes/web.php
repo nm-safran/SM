@@ -6,6 +6,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudentDetailController;
 
+
 Auth::routes();
 
 Route::get('/', function () {

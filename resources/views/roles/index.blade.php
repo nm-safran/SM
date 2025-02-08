@@ -34,22 +34,18 @@
                                 <form action="{{ route('roles.destroy', $role->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
+                                    @can('edit-role')
+                                        <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-primary btn-sm"><i
+                                                class="bi bi-pencil-square"></i> Edit</a>
+                                    @endcan
 
-                                    @if ($role->name != 'Super Admin')
-                                        @can('edit-role')
-                                            <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-primary btn-sm"><i
-                                                    class="bi bi-pencil-square"></i> Edit</a>
-                                        @endcan
-
-                                        @can('delete-role')
-                                            @if ($role->name != Auth::user()->hasRole($role->name))
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Do you want to delete this role?');"><i
-                                                        class="bi bi-trash"></i> Delete</button>
-                                            @endif
-                                        @endcan
-                                    @endif
-
+                                    @can('delete-role')
+                                        @if ($role->name != Auth::user()->hasRole($role->name))
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Do you want to delete this role?');"><i
+                                                    class="bi bi-trash"></i> Delete</button>
+                                        @endif
+                                    @endcan
                                 </form>
                             </td>
                         </tr>

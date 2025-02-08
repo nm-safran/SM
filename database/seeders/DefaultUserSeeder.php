@@ -17,18 +17,10 @@ class DefaultUserSeeder extends Seeder
         // Creating Super Admin User
         $superAdmin = User::create([
             'name' => 'superadmin',
-            'email' => 'admin1@example.com',
-            'password' => Hash::make('admin1')
+            'email' => 'admin@example.com',
+            'password' => Hash::make('admin')
         ]);
         $superAdmin->assignRole('Super Admin');
-
-        // Creating Admin User
-        $admin = User::create([
-            'name' => 'Admin',
-            'email' => 'adminuser@example.com',
-            'password' => Hash::make('admin2')
-        ]);
-        $admin->assignRole('Admin');
 
         // Creating Application User
         $user = User::create([

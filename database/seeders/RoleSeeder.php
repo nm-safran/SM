@@ -13,11 +13,10 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => 'Super Admin']);
-        $admin = Role::create(['name' => 'Admin']);
+        $superAdmin = Role::create(['name' => 'Super Admin']);
         $user = Role::create(['name' => 'User']);
 
-        $admin->givePermissionTo([
+        $superAdmin->givePermissionTo([
             'create-user',
             'edit-user',
             'delete-user',
