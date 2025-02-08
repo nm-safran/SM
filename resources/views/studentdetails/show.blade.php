@@ -8,9 +8,12 @@
                     <h3 class="title-h3 fw-bold">Student Information</h3>
                 </div>
                 <div class="d-flex gap-2">
-                    <a class="btn btn-custom" href="{{ route('studentdetails.index') }}">
+
+                    <a class="btn" href="{{ route('studentdetails.index') }}"
+                        style="background-color: #151515; color: #ffffff;">
                         <i class="fas fa-arrow-left me-2"></i> Back
                     </a>
+
                     @can('edit-studentdetail')
                         <a class="btn btn-primary" href="{{ route('studentdetails.edit', $studentDetail) }}">
                             <i class="fas fa-edit me-2"></i> Edit
