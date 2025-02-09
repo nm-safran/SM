@@ -7,6 +7,11 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+![image](https://github.com/user-attachments/assets/9cb2cb3c-9a77-49a2-871e-d53dbddfe19f)
+![image](https://github.com/user-attachments/assets/8a73503c-ad76-4a74-890b-333d9cdef053)
+![image](https://github.com/user-attachments/assets/af1ba500-f089-43b0-a1cb-d2aa7b86e108)
+
+
 ## Simple Student Management System
 
 -   Provides Role and Permission
