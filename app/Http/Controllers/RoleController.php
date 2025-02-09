@@ -8,9 +8,10 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+use Exception;
 
 class RoleController extends Controller
 {
@@ -28,9 +29,15 @@ class RoleController extends Controller
      */
     public function index(): View
     {
-        return view('roles.index', [
-            'roles' => Role::with('permissions')->orderBy('id', 'DESC')->paginate(3)
-        ]);
+        try {
+            $roles = Role::with('permissions')
+                ->orderBy('id', 'DESC')
+                ->paginate(5); // Increased from 3 to 5 for better viewing
+
+            return view('roles.index', compact('roles'));
+        } catch (Exception $e) {
+            return view('roles.index')->with('error', 'Error loading roles: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -38,9 +45,12 @@ class RoleController extends Controller
      */
     public function create(): View
     {
-        return view('roles.create', [
-            'permissions' => Permission::get()
-        ]);
+        try {
+            $permissions = Permission::orderBy('name')->get();
+            return view('roles.create', compact('permissions'));
+        } catch (Exception $e) {
+            return back()->with('error', 'Error loading permissions: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -48,14 +58,26 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request): RedirectResponse
     {
-        $role = Role::create(['name' => $request->name]);
+        try {
+            DB::beginTransaction();
 
-        $permissions = Permission::whereIn('id', $request->permissions)->get(['name'])->toArray();
+            $role = Role::create(['name' => $request->name]);
 
-        $role->syncPermissions($permissions);
+            $permissions = Permission::whereIn('id', $request->permissions)
+                ->pluck('name')
+                ->toArray();
 
-        return redirect()->route('roles.index')
-            ->withSuccess('New role is added successfully.');
+            $role->syncPermissions($permissions);
+
+            DB::commit();
+
+            return redirect()->route('roles.index')
+                ->with('success', 'New role has been created successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Error creating role: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
@@ -71,19 +93,18 @@ class RoleController extends Controller
      */
     public function edit(Role $role): View
     {
-        if ($role->name == 'Super Admin') {
-            abort(403, 'SUPER ADMIN ROLE CAN NOT BE EDITED');
+        try {
+            if ($role->name == 'Super Admin') {
+                abort(403, 'SUPER ADMIN ROLE CANNOT BE EDITED');
+            }
+
+            $permissions = Permission::orderBy('name')->get();
+            $rolePermissions = $role->permissions->pluck('id')->toArray();
+
+            return view('roles.edit', compact('role', 'permissions', 'rolePermissions'));
+        } catch (Exception $e) {
+            return back()->with('error', 'Error loading role: ' . $e->getMessage());
         }
-
-        $rolePermissions = DB::table("role_has_permissions")->where("role_id", $role->id)
-            ->pluck('permission_id')
-            ->all();
-
-        return view('roles.edit', [
-            'role' => $role,
-            'permissions' => Permission::get(),
-            'rolePermissions' => $rolePermissions
-        ]);
     }
 
     /**
@@ -91,16 +112,30 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role): RedirectResponse
     {
-        $input = $request->only('name');
+        try {
+            if ($role->name == 'Super Admin') {
+                abort(403, 'SUPER ADMIN ROLE CANNOT BE MODIFIED');
+            }
 
-        $role->update($input);
+            DB::beginTransaction();
 
-        $permissions = Permission::whereIn('id', $request->permissions)->get(['name'])->toArray();
+            $role->update(['name' => $request->name]);
 
-        $role->syncPermissions($permissions);
+            $permissions = Permission::whereIn('id', $request->permissions)
+                ->pluck('name')
+                ->toArray();
 
-        return redirect()->back()
-            ->withSuccess('Role is updated successfully.');
+            $role->syncPermissions($permissions);
+
+            DB::commit();
+
+            return redirect()->route('roles.index')
+                ->with('success', 'Role has been updated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Error updating role: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     /**
@@ -108,14 +143,26 @@ class RoleController extends Controller
      */
     public function destroy(Role $role): RedirectResponse
     {
-        if ($role->name == 'Super Admin') {
-            abort(403, 'SUPER ADMIN ROLE CAN NOT BE DELETED');
+        try {
+            if ($role->name == 'Super Admin') {
+                abort(403, 'SUPER ADMIN ROLE CANNOT BE DELETED');
+            }
+
+            if (Auth::user()->hasRole($role->name)) {
+                abort(403, 'CANNOT DELETE SELF-ASSIGNED ROLE');
+            }
+
+            DB::beginTransaction();
+
+            $role->delete();
+
+            DB::commit();
+
+            return redirect()->route('roles.index')
+                ->with('success', 'Role has been deleted successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Error deleting role: ' . $e->getMessage());
         }
-        if (auth()->user()->hasRole($role->name)) {
-            abort(403, 'CAN NOT DELETE SELF ASSIGNED ROLE');
-        }
-        $role->delete();
-        return redirect()->route('roles.index')
-            ->withSuccess('Role is deleted successfully.');
     }
 }
