@@ -45,7 +45,7 @@ class StudentDetailController extends Controller
                     ->orWhere('district', 'like', "%{$search}%");
             })
             ->orderBy($sortBy, $sortOrder)
-            ->paginate(10);
+            ->paginate(5);
 
         return view('studentdetails.index', compact('studentDetails', 'search'));
     }
