@@ -27,7 +27,7 @@ Before proceeding, ensure you have the following installed:
     Clone the repository to your htdocs directory:
 
     ```bash
-    git clone https:// C:/xampp/htdocs/your-project-folder
+    git clone https://github.com/nm-safran/SM.git
     ```
 
 2. **Start XAMPP Server**
@@ -105,7 +105,6 @@ Here are the default credentials for testing:
 -   Email: student@example.com
 -   Password: student1
 
-
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
@@ -147,8 +146,6 @@ We would like to extend our thanks to the following sponsors for funding Laravel
 -   **[Active Logic](https://activelogic.com)**
 -   **[byte5](https://byte5.de)**
 -   **[OP.GG](https://op.gg)**
-
-
 
 ## License
 
