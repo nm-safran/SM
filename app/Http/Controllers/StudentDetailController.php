@@ -74,9 +74,10 @@ class StudentDetailController extends Controller
                 $validated['profile_image'] = '/storage/' . $path;
             }
 
-            // Calculate age
+            // Calculate age as of 01/01/2025
             $birthDate = Carbon::parse($validated['birth_date']);
-            $validated['age'] = $birthDate->age;
+            $referenceDate = Carbon::create(2025, 1, 1);
+            $validated['age'] = $birthDate->diffInYears($referenceDate);
 
             // Create student record
             StudentDetail::create($validated);
@@ -157,7 +158,11 @@ class StudentDetailController extends Controller
     public function update(UpdateStudentDetailRequest $request, StudentDetail $studentDetail): RedirectResponse
     {
         $data = $request->validated();
-        $data['age'] = Carbon::parse($data['birth_date'])->age;
+
+        // Calculate age as of 01/01/2025
+        $birthDate = Carbon::parse($data['birth_date']);
+        $referenceDate = Carbon::create(2025, 1, 1);
+        $data['age'] = $birthDate->diffInYears($referenceDate);
 
         if ($request->hasFile('profile_image')) {
             $image = $request->file('profile_image');
