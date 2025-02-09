@@ -49,14 +49,20 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $input = $request->all();
-        $input['password'] = Hash::make($request->password);
+        try {
+            $input = $request->validated();
+            $input['password'] = Hash::make($request->password);
 
-        $user = User::create($input);
-        $user->assignRole($request->roles);
+            $user = User::create($input);
+            $user->assignRole($request->roles);
 
-        return redirect()->route('users.index')
-            ->withSuccess('New user is added successfully.');
+            return redirect()->route('users.index')
+                ->withSuccess('New user is added successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withError('Error creating user. Please try again.');
+        }
     }
 
     /**

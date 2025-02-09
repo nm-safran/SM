@@ -29,10 +29,14 @@
                     <label for="email" class="col-md-3 col-form-label text-md-end fw-semibold">Email Address</label>
                     <div class="col-md-6">
                         <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                            name="email" value="{{ old('email') }}" placeholder="Enter email address">
+                            name="email" value="{{ old('email') }}" placeholder="Enter email address"
+                            autocomplete="email">
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <small class="form-text text-muted">
+                            Enter a valid email address (e.g., name@example.com)
+                        </small>
                     </div>
                 </div>
 
