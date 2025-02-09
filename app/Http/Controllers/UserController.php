@@ -9,6 +9,9 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Exception;
+
 
 class UserController extends Controller
 {
@@ -97,20 +100,25 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $input = $request->all();
+        try {
+            $input = $request->validated();
 
-        if (!empty($request->password)) {
-            $input['password'] = Hash::make($request->password);
-        } else {
-            $input = $request->except('password');
+            if (!empty($input['password'])) {
+                $input['password'] = Hash::make($input['password']);
+            } else {
+                unset($input['password']);
+            }
+
+            $user->update($input);
+            $user->syncRoles($request->roles);
+
+            return redirect()->route('users.index')
+                ->withSuccess('User updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withError('Error updating user. Please try again.');
         }
-
-        $user->update($input);
-
-        $user->syncRoles($request->roles);
-
-        return redirect()->back()
-            ->withSuccess('User is updated successfully.');
     }
 
     /**
