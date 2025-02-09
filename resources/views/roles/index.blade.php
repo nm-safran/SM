@@ -34,7 +34,7 @@
                                     <div class="d-flex flex-wrap gap-2">
                                         @forelse ($role->permissions as $permission)
                                             <span
-                                                class="badge rounded-pill bg-info bg-opacity-25 text-info border border-info border-opacity-25">
+                                                class="badge rounded-pill bg-success bg-opacity-25 text-success border border-success border-opacity-25">
                                                 {{ $permission->name }}
                                             </span>
                                         @empty
