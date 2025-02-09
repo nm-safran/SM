@@ -7,6 +7,16 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Simple Student Management System
+
+-   Provides Role and Permission
+-   View Student Details
+-   Create Student
+-   Edit and Update Student
+-   Delete Student
+-   Create, Edit, and Delete Role
+-   Create, Edit, and Delete User
+
 ## Laravel System Installation Guide
 
 This guide will help you set up the Laravel system on your local machine. Follow the steps below to get started.
