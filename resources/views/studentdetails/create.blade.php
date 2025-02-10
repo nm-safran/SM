@@ -19,6 +19,12 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
+            @php
+                $lastStudent = \App\Models\StudentDetail::orderBy('student_code', 'desc')->first();
+                $nextStudentCode = $lastStudent
+                    ? 'STU_' . str_pad((int) substr($lastStudent->student_code, 4) + 1, 4, '0', STR_PAD_LEFT)
+                    : 'STU_0001';
+            @endphp
             <form action="{{ route('studentdetails.store') }}" method="POST" enctype="multipart/form-data"
                 id="studentForm">
                 @csrf
@@ -29,7 +35,7 @@
                                     class="text-danger">*</span></label>
                             <input type="text" name="student_code" id="student_code"
                                 class="form-control @error('student_code') is-invalid @enderror"
-                                value="{{ old('student_code') }}" required>
+                                value="{{ old('student_code', $nextStudentCode) }}" required readonly>
                             @error('student_code')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

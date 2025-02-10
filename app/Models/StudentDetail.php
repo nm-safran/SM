@@ -37,4 +37,16 @@ class StudentDetail extends Model
         'district' => 'string',
         'contact_no' => 'string',
     ];
+
+    // Add unique constraint to student_code
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (static::where('student_code', $model->student_code)->exists()) {
+                throw new \Exception('Student code must be unique');
+            }
+        });
+    }
 }

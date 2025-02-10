@@ -61,7 +61,8 @@
                             @foreach ($studentDetails as $index => $studentDetail)
                                 <tr>
                                     <td class="align-middle">{{ $studentDetails->firstItem() + $index }}</td>
-                                    <td class="align-middle">{{ $studentDetail->student_code }}</td>
+                                    <td class="align-middle">
+                                        {{ '' . str_pad($studentDetail->student_code, 4, '0', STR_PAD_LEFT) }}</td>
                                     <td class="align-middle">{{ $studentDetail->first_name }}
                                         {{ $studentDetail->middle_name }}
                                         {{ $studentDetail->last_name }}</td>
